@@ -10,9 +10,10 @@ import requests
 import ulid
 from pexels_api import API
 
+def get_api(cred):
+    return API(cred)
 
-def download_pexels(query, api_key, basedir, n_photos=40):
-    api = API(api_key)
+def download_pexels(query, api, basedir, n_photos=40):
     meta = []
     
     do_sleep = False
@@ -43,12 +44,8 @@ def download_pexels(query, api_key, basedir, n_photos=40):
     
     # Get photos
     for photo in all_entires:
-        filename = str(n_photos).zfill(len(str(n_photos)))
-
         dir = path
         filename = f"pexels-{photo.id}"
-        if not os.path.isdir(dir):
-            os.mkdir(dir)
             
         download_url = photo.original
         # download_url = photo.large2x
@@ -80,7 +77,7 @@ def download_pexels(query, api_key, basedir, n_photos=40):
                     "width": photo.width,
                     "height": photo.height
                 })
-                sleep(1)
+                sleep(0.5)
             except:
                 logging.error("\nInterrupted, {} photos downloaded".format(n_photos-1))
                 os.remove(photo_path)
