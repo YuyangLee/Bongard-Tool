@@ -3,3 +3,4 @@ credentials/
 dataset/
 thirdparty/
 logs/
+*.tar.gz
