@@ -33,12 +33,12 @@ ds_metadata['paths'] = { k: [] for k in queries }
 with torch.no_grad():
     for i, q in enumerate(tqdm(queries)):
         image_buffer, paths_buffer = [], []
-        query_buffer = [ "a photo of " + q ]
+        query_buffer = [ "a photo of " + q.lower() ]
         acc_thres = 0.5
         
         paths = all_paths[q]
         while len(query_buffer) < 8:
-            neg_q = "a photo of " + random.choice(queries)
+            neg_q = "a photo of " + random.choice(queries).lower()
             if not neg_q in query_buffer:
                 query_buffer.append(neg_q)
                 
@@ -56,7 +56,7 @@ with torch.no_grad():
         ds_metadata['stat'][q] = len(acc)
         ds_metadata['paths'][q] = [ paths[j] for j in acc ]
         
-        tqdm.write(f"Accepted {len(acc)} images")
+        tqdm.write(f"[{q}] Accepted {len(acc)} / {len(paths)} images")
         
         image_buffer, query_buffer, paths_buffer = [], [], []
     
