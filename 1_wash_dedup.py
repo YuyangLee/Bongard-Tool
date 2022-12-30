@@ -6,24 +6,29 @@ from datetime import datetime
 import numpy as np
 import torch
 import torchvision
+import clip
+from PIL import Image
 import yaml
+from tqdm import tqdm
 
-metadata_path = "dataset/metadata.json"
+pre_metadata_path = "dataset/pre_metadata.json"
 img_basedir = "dataset/images"
 
-metadata = json.load(open(metadata_path, "r"))
-json.dump(metadata, open(f"dataset/backup/metadata.{ datetime.now().strftime('%Y-%m-%d_%H:%M:%S') }.json", "w"))
+metadata = json.load(open(pre_metadata_path, "r"))
+# json.dump(metadata, open(f"dataset/backup/pre_metadata.{ datetime.now().strftime('%Y-%m-%d_%H:%M:%S') }.json", "w"))
 
 stat = metadata['queries']
 data = metadata['metadata']
 
+device = "cuda" if torch.cuda.is_available() else "cpu"
+model, preprocess = clip.load("ViT-B/32", device=device)
+
 actual_stat = { k: 0 for k in stat.keys() }
 paths = { k: [] for k in stat.keys() }
 
-checked = []
+checked, error_idxs = [], []
 
-error_idxs = []
-for i, v in enumerate(data):
+for i, v in enumerate(tqdm(data)):
     hash = f"{v['query']}-{v['source']}-{v['pid']}"
     if hash in checked:
         error_idxs.append(i)
@@ -41,9 +46,9 @@ for i, v in enumerate(data):
         checked.append(hash)
     else:
         error_idxs.append(i)
+        continue
         
     paths[v['query']].append(file)
-    
     actual_stat[v['query']] += 1
     
 error_idxs = list(set(error_idxs))
@@ -58,4 +63,4 @@ print(f"Actual amount of image: { len(metadata['metadata']) }")
 metadata['paths'] = paths
 metadata['queries'] = actual_stat
 
-json.dump(metadata, open(metadata_path, "w"))
+json.dump(metadata, open(pre_metadata_path, "w"))

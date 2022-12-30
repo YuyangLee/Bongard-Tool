@@ -28,9 +28,10 @@ logging.basicConfig(filename=f'{args.logdir}/pexels-{ str(datetime.now().timesta
 cred_path = "credentials/credentials.yaml"
 query_path = "data/queries.json"
 
-metadata_path = "dataset/metadata.json"
+metadata_path = "dataset/pre_metadata.json"
 dataset_basedir = "dataset/images"
 
+# TODO: <= Python 3.9
 match args.source:
     case "pexels":
         cred = get_yaml_data(cred_path)['pexels']
