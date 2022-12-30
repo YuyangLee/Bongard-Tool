@@ -81,10 +81,6 @@ def download_pexels(query, api, basedir, n_photos=40):
             except:
                 logging.error("\nInterrupted, {} photos downloaded".format(n_photos-1))
                 os.remove(photo_path)
-                if not os.listdir(dir):
-                    os.rmdir(dir)
-                    if not os.listdir(os.path.split(dir)[0]):
-                        os.rmdir(os.path.split(dir)[0])
                 break
             
     return meta, do_sleep

@@ -11,13 +11,14 @@ from tqdm import tqdm
 from utils.utils_dev import get_yaml_data
 from utils.utils_pexels import download_pexels
 from utils.utils_flickr import download_flickr
+from utils.utils_unsplash import download_unsplash
 
 import argparse
 
 parser = argparse.ArgumentParser()
 
 parser.add_argument("--logdir", type=str, default="logs")
-parser.add_argument("--source", type=str, default="flickr")
+parser.add_argument("--source", type=str, default="unsplash")
 
 args = parser.parse_args()
 
@@ -43,6 +44,13 @@ match args.source:
         os.environ['HTTP_PROXY']="http://127.0.0.1:7890"
         os.environ['HTTPS_PROXY']="http://127.0.0.1:7890"
         from utils.utils_flickr import get_api
+    case "unsplash":
+        download = download_unsplash
+        os.environ.pop("HTTP_PROXY", None)
+        os.environ.pop("HTTPS_PROXY", None)
+        cred = get_yaml_data(cred_path)['unsplash']
+        from utils.utils_unsplash import get_api
+        
     case _:
         raise NotImplementedError()
         
@@ -57,7 +65,8 @@ else:
     metadata = { 'metadata': [], 'queries': {} }
 
 queries = json.load(open(query_path, "r"))
-n_each_query = 10
+queries = list(set(queries))
+n_each_query = 5
 
 api_stat = {}
 
@@ -67,14 +76,16 @@ api = get_api(next(tokens))
 
 hour_count = 0
 
-for query in tqdm(queries):
+for query in tqdm(queries[70:]):
+    print(query)
     meta, do_sleep = download(query, api, dataset_basedir, n_each_query)
     
     metadata['metadata'] += meta
     metadata['queries'][query] = len(meta) if query not in metadata['queries'] else metadata['queries'][query] + len(meta)
     json.dump(metadata, open(metadata_path, "w"))
     
-    hour_count += len(meta) + 1
+    hour_count += 1
+    # hour_count += len(meta) + 1
     
     if hour_count >= hour_amount or do_sleep:
         hour_count = 0
