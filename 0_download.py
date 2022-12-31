@@ -28,7 +28,7 @@ logging.basicConfig(filename=f'{args.logdir}/pexels-{ str(datetime.now().timesta
 cred_path = "credentials/credentials.yaml"
 query_path = "data/queries.json"
 
-metadata_path = "dataset/pre_metadata.json"
+metadata_path = f"dataset/pre_metadata-{ args.source }.json"
 dataset_basedir = "dataset/images"
 
 # TODO: <= Python 3.9
