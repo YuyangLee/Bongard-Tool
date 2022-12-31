@@ -24,7 +24,7 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 model, preprocess = clip.load("ViT-B/32", device=device)
 
 actual_stat = { k: 0 for k in stat.keys() }
-paths = { k: [] for k in stat.keys() }
+paths = { k: {} for k in stat.keys() }
 
 checked, error_idxs = [], []
 
@@ -48,7 +48,7 @@ for i, v in enumerate(tqdm(data)):
         error_idxs.append(i)
         continue
         
-    paths[v['query']].append(file)
+    paths[v['query']][v['id']] = file
     actual_stat[v['query']] += 1
     
 error_idxs = list(set(error_idxs))
