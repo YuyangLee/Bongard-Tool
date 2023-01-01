@@ -1,5 +1,6 @@
 env=dataset
 
+# Make sure that there are no these tmux sessions
 for source in pexels unsplash flickr
 do
     tmux new-session -d -s $source
