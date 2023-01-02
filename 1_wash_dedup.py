@@ -4,9 +4,6 @@ import os
 import matplotlib.pyplot as plt
 from datetime import datetime
 import numpy as np
-import torch
-import torchvision
-import clip
 from PIL import Image
 import yaml
 from tqdm import tqdm
@@ -19,9 +16,6 @@ metadata = json.load(open(pre_metadata_path, "r"))
 
 stat = metadata['queries']
 data = metadata['metadata']
-
-device = "cuda" if torch.cuda.is_available() else "cpu"
-model, preprocess = clip.load("ViT-B/32", device=device)
 
 actual_stat = { k: 0 for k in stat.keys() }
 paths = { k: {} for k in stat.keys() }

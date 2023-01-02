@@ -67,7 +67,7 @@ else:
 
 queries = json.load(open(query_path, "r"))
 queries = list(set(queries))
-n_each_query = 5
+n_each_query = 40
 
 api_stat = {}
 
@@ -77,7 +77,7 @@ api = get_api(next(tokens))
 
 hour_count = 0
 
-for query in tqdm(queries[70:]):
+for query in tqdm(queries):
     print(query)
     meta, do_sleep = download(query, api, dataset_basedir, n_each_query)
     

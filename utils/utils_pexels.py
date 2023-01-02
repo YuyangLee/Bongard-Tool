@@ -26,7 +26,7 @@ def download_pexels(query, api, basedir, n_photos=40):
         api.search(query, per_page)
         logging.info("Total results: {}".format(api.total_results))
     
-        if not api.json["photos"]: return meta
+        if not api.json["photos"]: return meta, True
         if n_photos > api.total_results:
             n_photos = api.total_results
             logging.info("Not enough photos, downloading {} photos instead".format(n_photos))
