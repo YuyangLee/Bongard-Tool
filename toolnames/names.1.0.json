@@ -6,6 +6,7 @@
         "Hoe",
         "Watering Can",
         "Wheelbarrow",
+        "Garden Hose",
         "Lawn Mower",
         "Trowel",
         "Pruner"
@@ -15,8 +16,10 @@
         "Cutting Board",
         "Spatula",
         "Whisk",
+        "Measuring Cup",
         "Pot",
         "Pan",
+        "Oven Mitt",
         "Colander",
         "Wooden Spoon"
     ],
@@ -24,9 +27,11 @@
         "Hammer",
         "Saw",
         "Screwdriver",
+        "Nail",
         "Level",
         "Drill",
         "Chisel",
+        "Sandpaper",
         "Tape Measure",
         "Clamps"
     ],
@@ -36,6 +41,10 @@
         "Voltage Tester",
         "Screwdriver",
         "Wrench",
+        "Electrical Tape",
+        "Socket Set",
+        "Wire Cutters",
+        "Fuse",
         "Drill"
     ],
     "Plumbing": [
@@ -46,19 +55,25 @@
         "Soldering Iron",
         "Basin Wrench",
         "Plumber Snake",
-        "Pipe Fittings"
+        "Adjustable Wrench",
+        "Pipe Fittings",
+        "Pipe Sealant"
     ],
     "Painting": [
         "Paintbrush",
         "Roller",
         "Paint Tray",
         "Drop Cloth",
+        "Sandpaper",
         "Paint Scraper",
         "Paint Thinner",
-        "Paint Sprayer"
+        "Paint Sprayer",
+        "Paint Roller Extension",
+        "Paint Stirrer"
     ],
     "Automotive": [
         "Wrench",
+        "Socket Set",
         "Screwdriver",
         "Pliers",
         "Ratchet",
@@ -77,16 +92,19 @@
         "Seam Ripper",
         "Tape Measure",
         "Sewing Machine",
-        "Iron"
+        "Iron",
+        "Bobbin"
     ],
     "Woodworking": [
         "Saw",
+        "Sandpaper",
         "Chisel",
         "Hammer",
         "Plane",
         "Drill",
         "Clamps",
         "Router",
+        "Vise",
         "Screwdriver"
     ],
     "Home Repair": [
@@ -97,7 +115,9 @@
         "Level",
         "Tape Measure",
         "Drill",
-        "Putty Knife"
+        "Putty Knife",
+        "Utility Knife",
+        "Sandpaper"
     ],
     "Metalworking": [
         "Hammer",
@@ -119,6 +139,8 @@
         "Mortar Mixer",
         "Masonry Saw",
         "Masonry Drill",
+        "Masonry Nails",
+        "Masonry Sealant",
         "Masonry Brush"
     ],
     "Landscaping": [
@@ -130,7 +152,8 @@
         "Lawn Mower",
         "Edger",
         "Hedge Trimmer",
-        "Leaf Blower"
+        "Leaf Blower",
+        "Sprinkler"
     ],
     "Cleaning": [
         "Vacuum",
@@ -138,24 +161,35 @@
         "Broom",
         "Dustpan",
         "Sponge",
+        "Cleaning Cloths",
+        "Cleaning Solutions",
         "Scrub Brush",
         "Window Squeegee",
         "Bucket"
     ],
     "Baking": [
         "Measuring Cups",
+        "Mixing Bowls",
         "Spatula",
-        "Whisk"
+        "Whisk",
+        "Rolling Pin",
+        "Baking Sheet",
+        "Oven Mitt",
+        "Cooling Rack",
+        "Cake Pan",
+        "Cookie Cutters"
     ],
     "Fishing": [
         "Fishing Rod",
         "Reel",
         "Lures",
         "Hooks",
+        "Line",
         "Tackle Box",
         "Net",
         "Pliers",
-        "Bait"
+        "Bait",
+        "Bobbers"
     ],
     "Hunting": [
         "Rifle",
@@ -164,6 +198,7 @@
         "Knife",
         "Flashlight",
         "Compass",
+        "Camouflage Clothing",
         "Game Calls",
         "Backpack",
         "First Aid Kit"
@@ -174,21 +209,34 @@
         "Flashlight",
         "Matches",
         "First Aid Kit",
+        "Camp Stove",
         "Water Bottle",
         "Compass",
-        "Knife"
+        "Knife",
+        "Rope"
     ],
     "Hiking": [
         "Backpack",
         "Water Bottle",
+        "Hiking Boots",
+        "Map",
         "Compass",
         "Flashlight",
-        "First Aid Kit"
+        "First Aid Kit",
+        "Hat",
+        "Sunscreen",
+        "Insect Repellent"
     ],
     "Cycling": [
+        "Bicycle",
         "Helmet",
         "Pump",
+        "Tire Repair Kit",
+        "Lock",
         "Water Bottle",
-        "Multi-Tool"
+        "Chain Lube",
+        "Spare Tube",
+        "Multi-Tool",
+        "Lights"
     ]
 }
