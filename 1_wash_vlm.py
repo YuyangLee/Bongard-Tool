@@ -1,3 +1,4 @@
+from collections import defaultdict
 import json
 import os
 import random
@@ -12,50 +13,72 @@ from PIL import Image
 import yaml
 from tqdm import tqdm
 from utils.utils_clip import export_transform
+import os
 
-pre_metadata_path = "dataset/pre_metadata.json"
-metadata_path = "dataset/metadata.json"
-img_basedir = "dataset/images"
-export_basedir = "dataset/functools"
+# pre_metadata_path = "dataset/pre_metadata.json"
+# metadata_path = "dataset/metadata.json"
+# img_basedir = "dataset/images"
+# export_basedir = "dataset/functools"
 ds_metadata = {}
-unified_resolution = 1024
+unified_resolution = 512
 
 n_acc, n_all = 0, 0
 
-pre_metadata = json.load(open(pre_metadata_path, "r"))
+# pre_metadata = json.load(open(pre_metadata_path, "r"))
 # metadata = json.load(open(metadata_path, "r"))
 # json.dump(metadata, open(f"dataset/backup/metadata.{ datetime.now().strftime('%Y-%m-%d_%H:%M:%S') }.json", "w"))
-
-all_paths = pre_metadata['paths']
+# all_paths = pre_metadata['paths']
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 model, preprocess = clip.load("ViT-B/32", device=device)
 export_proc = export_transform(unified_resolution)
 
-queries = list(pre_metadata['queries'].keys())
-ds_metadata['stat'] = { k: 0  for k in queries }
-ds_metadata['paths'] = { k: {} for k in queries }
+# queries = list(pre_metadata['queries'].keys())
+# ds_metadata['stat'] = { k: 0  for k in queries }
+# ds_metadata['paths'] = { k: {} for k in queries }
+
+basedir = "dataset/stocks"
+export_basedir = "dataset/output_stocks"
+
+queries = os.listdir(basedir)
+ulids = defaultdict(list)
+all_paths = defaultdict(list)
 
 with torch.no_grad():
     for i, q in enumerate(tqdm(queries)):
+        if not os.path.isdir(os.path.join(basedir, q)):
+            continue
         image_buffer, paths_buffer, export_buffer = [], [], []
         query_buffer = [ "a photo of " + q.lower() ]
-        acc_thres = 0.5
+        acc_thres = 0.7
         
-        paths = all_paths[q]
-        ids = list(paths.keys())
-        n_all += len(paths)
+        paths = os.listdir(os.path.join(basedir, q))
         
-        while len(query_buffer) < 8:
+        while len(query_buffer) < 4:
             neg_q = "a photo of " + random.choice(queries).lower()
             if not neg_q in query_buffer:
                 query_buffer.append(neg_q)
                 
-        for p in paths.values():
-            image = Image.open(os.path.join(img_basedir, p))
-            image_buffer.append(preprocess(image).to(device))
-            export_buffer.append(export_proc(image).to(device))
-            
+        for p in paths:
+            if 'json' in p:
+                continue
+            try:
+                image = Image.open(os.path.join(basedir, q, p))
+                image_buf = preprocess(image).to(device)
+                export_buf = export_proc(image).to(device)
+                image_buffer.append(image_buf)
+                export_buffer.append(export_buf)
+                ulids[q].append(p.split(".")[0])
+                all_paths[q].append(p)
+                n_all += 1
+            except Exception as ex:
+                tqdm.write(f"Error in processing {q} - {p}: {ex}")
+                
+        if image_buffer == []:
+            ulids[q] = []
+            all_paths[q] = []
+            continue
+        
         image = torch.stack(image_buffer)
         query = clip.tokenize(query_buffer).to(device)
         image_features = model.encode_image(image)
@@ -65,13 +88,11 @@ with torch.no_grad():
         
         acc = torch.where(probs[:, 0] > acc_thres)[0].cpu().numpy().tolist()
         n_acc += len(acc)
-        ds_metadata['stat'][q] = len(acc)
-        ds_metadata['paths'][q] = { ids[j]: paths[ids[j]] for j in acc }
         
         tqdm.write(f"[{q}] Accepted {len(acc)} / {len(paths)} images")
         
         os.makedirs(os.path.join(export_basedir, q), exist_ok=True)
-        for j, id in enumerate(paths.keys()):
+        for j, id in enumerate(ulids[q]):
             filename = id + ".jpg"
             if not j in acc:
                 filename = "rej_" + filename
@@ -79,7 +100,10 @@ with torch.no_grad():
         
         image_buffer, query_buffer, paths_buffer = [], [], []
     
-json.dump(ds_metadata, open(metadata_path, "w"))
+# json.dump(ds_metadata, open(metadata_path, "w"))
+
+json.dump(ulids, open(os.path.join(basedir, "ulids.json"), "w"))
+json.dump(all_paths, open(os.path.join(basedir, "paths.json"), "w"))
 
 print(f"Totally accepted {n_acc} / {n_all} images")
     
