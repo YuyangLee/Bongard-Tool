@@ -1,0 +1,23 @@
+data_root: /code/Dataset
+split_type: random
+use_aug: true
+
+model: wren
+model_args:
+    encoder: resnet12
+    encoder_args: {out_dim: 128}
+    method: modified  # original
+#load_encoder: ./materials/shape-moco-resnet12-epoch50.pth
+#load: ./save/meta_shape-bongard-6shot_meta-baseline-resnet12-seed123/epoch-last.pth
+
+n_way: 2
+n_shot: 6
+n_query: 1
+train_batches: 1125
+ep_per_batch: 8
+
+max_epoch: 100
+optimizer: sgd
+optimizer_args: {lr: 0.001, weight_decay: 5.e-4}
+
+visualize_datasets: false
