@@ -1,5 +1,3 @@
-# README
-
 # Bongard-Tool
 
 This is the repo for the implementation of PKU CoRe 22 Submission *Bongard-Tool: Tool Concept Induction from Few-Shot Exemplars*. Here you can find our data collection scripts and baseline experiment codebase. Work in progress, so please stay tuned.
