@@ -8,7 +8,6 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 import models
-import utils
 from .models import register
 
 

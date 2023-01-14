@@ -2,21 +2,19 @@ data_root: /code/Dataset
 split_type: random
 use_aug: true
 
-model: maml
+model: metaOptNet
 model_args:
-    encoder: resnet12
-    encoder_args: {out_dim: 128}
-    method: anil  # maml
-    step_size: 0.4
-    first_order: true
-#load_encoder: ./materials/shape-moco-resnet12-epoch50.pth
+    encoder: resnet50
+    encoder_args: {pretrained: false}
+    head: ProtoNet
+    normalize: false
+#load_encoder: ./save/encoders/shape-moco-resnet12.pth
 #load: ./save/meta_shape-bongard-6shot_meta-baseline-resnet12-seed123/epoch-last.pth
 
 n_way: 2
 n_shot: 6
 n_query: 1
-train_batches: 1125
-ep_per_batch: 8
+ep_per_batch: 16
 
 max_epoch: 100
 optimizer: sgd

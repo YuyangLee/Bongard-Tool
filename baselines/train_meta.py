@@ -20,7 +20,6 @@ import utils
 import utils.few_shot as fs
 from datasets.dataset import ToolDataModule
 
-from torchvision.models import resnet18
 
 def main(config):
     svname = args.name
@@ -84,12 +83,8 @@ def main(config):
 
         if config.get('load_encoder'):
             print('loading pretrained encoder: ', config['load_encoder'])
-            # encoder = models.load(torch.load(config['load_encoder'])).encoder
-            # TODO: fix this ugly way of loading pretrained model
-            model.encoder = resnet18()
-            model.encoder.load_state_dict(torch.load(config['load_encoder']))
-            # remove the last fc layer
-            model.encoder = torch.nn.Sequential(*(list(model.encoder.children())[:-1]))
+            encoder = models.load(torch.load(config['load_encoder'])).encoder
+            model.encoder.load_state_dict(encoder.state_dict())
 
         if config.get('load_prog_synthesis'):
             print('loading pretrained program synthesis model: ', config['load_prog_synthesis'])
@@ -134,7 +129,7 @@ def main(config):
             x_shot, x_query = data['shot'].cuda(), data['query'].cuda()
             B = x_shot.size(0)
             label_query = fs.make_nk_label(
-                n_train_way, 1,
+                n_train_way, n_query,
                 ep_per_batch=B).cuda()
 
             if config['model'] == 'snail':  # only use one selected label_query
@@ -170,7 +165,7 @@ def main(config):
             B = x_shot.size(0)
             
             label_query = fs.make_nk_label(
-                n_train_way, 1,
+                n_train_way, n_query,
                 ep_per_batch=B).cuda()
 
             if config['model'] == 'snail':  # only use one randomly selected label_query

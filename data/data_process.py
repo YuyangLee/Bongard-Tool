@@ -25,15 +25,13 @@ def generate_tasks(functions, func_tools, tool_paths, all_tools, N_per_func=10):
     return tasks
     
 
-
 if __name__ == '__main__':
-    parser = argparser.ArgumentParser()
-    parser.add_argument('name_path', default='./toolnames/names.1.2.1.json', help='the path to the json file containing all tool names')
-    parser.add_argument('data_root', default='./Dataset', help='the root directory of all classes of images')
-    args = parser.parse_args()
+    parser = argparse.ArgumentParser()
+    NAME_PATH = '../toolnames/names.1.2.1.json' # the path to the json file containing all tool names
+    DATA_ROOT = '/home/yuliu/Dataset/Tool' # the root directory of all classes of images
     
-    name_path = args.name_path
-    data_root = args.data_root
+    name_path = NAME_PATH
+    data_root = DATA_ROOT
     
     with open(name_path, 'r') as f:
         func_tools = json.load(f)
@@ -52,9 +50,11 @@ if __name__ == '__main__':
     all_tools = list(set(all_tools))
     print(f'functions: {len(functions)}')
     print(f'all tools: {len(all_tools)}')
+
     # generate bongard tasks
     random.seed(0)
     N_per_func = 100
+
     # Generate tasks for training and testing. Randomly split.
     print('Generate tasks for training and testing. Randomly split.')
     all_tasks = generate_tasks(functions, func_tools, tool_paths, all_tools, N_per_func=N_per_func)
@@ -69,6 +69,7 @@ if __name__ == '__main__':
     print(f'generate test tasks: {len(test_tasks)}')
     with open(f'{data_root}/test.json', 'w') as f:
         json.dump(test_tasks, f, indent=4)
+
     # Generate tasks for training and testing. 20% functions is unseen in training.
     print('Generate tasks for training and testing. 20% functions is unseen in training.')
     random.shuffle(functions)
