@@ -140,3 +140,6 @@ output/
 .DS_Store
 .vscode
 */evilai
+
+# Experiment results
+/baselines/save/*

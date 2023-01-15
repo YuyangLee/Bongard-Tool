@@ -76,14 +76,14 @@ class ToolDataModule():
         super().__init__()
         self.batch_size = batch_size
         self.num_workers = num_workers
-        if split_type == 'random':
+        if split_type == 'NS':
             train_spilt = 'train'
             test_split = 'test'
-        elif split_type == 'concept':
+        elif split_type == 'CGS':
             train_spilt = 'train_func'
             test_split = 'test_func'
         else:
-            raise ValueError('split_type must be random or concept')
+            raise ValueError('split_type must be NS or CGS')
 
         self.train_dataset = ToolDataset(data_root, train_spilt, use_aug)
         self.test_dataset = ToolDataset(data_root, test_split)

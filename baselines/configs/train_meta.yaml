@@ -1,20 +1,17 @@
-data_root: /code/Dataset
+data_root: /home/yuliu/Dataset/Tool
 split_type: random
 use_aug: true
 
-model: metaOptNet
+model: meta-baseline
 model_args:
     encoder: resnet50
     encoder_args: {pretrained: false}
-    head: SVM  # ProtoNet
-    normalize: false
-#load_encoder: ./save/encoders/shape-moco-resnet12.pth
+#load_encoder: ./materials/shape-moco-resnet12-epoch50.pth
 #load: ./save/meta_shape-bongard-6shot_meta-baseline-resnet12-seed123/epoch-last.pth
 
 n_way: 2
 n_shot: 6
 n_query: 1
-train_batches: 1125
 ep_per_batch: 16
 
 max_epoch: 100

@@ -1,4 +1,4 @@
-data_root: /code/Dataset
+data_root: /home/yuliu/Dataset/Tool
 split_type: random
 use_aug: true
 
@@ -13,7 +13,6 @@ model_args:
 n_way: 2
 n_shot: 6
 n_query: 1
-train_batches: 1125
 ep_per_batch: 16
 
 max_epoch: 100

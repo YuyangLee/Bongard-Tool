@@ -1,4 +1,4 @@
-data_root: /code/Dataset
+data_root: /home/yuliu/Dataset/Tool
 split_type: random
 use_aug: true
 
@@ -6,7 +6,7 @@ model: metaOptNet
 model_args:
     encoder: resnet50
     encoder_args: {pretrained: false}
-    head: ProtoNet
+    head: SVM  # ProtoNet
     normalize: false
 #load_encoder: ./save/encoders/shape-moco-resnet12.pth
 #load: ./save/meta_shape-bongard-6shot_meta-baseline-resnet12-seed123/epoch-last.pth

@@ -1,4 +1,4 @@
-data_root: /code/Dataset
+data_root: /home/yuliu/Dataset/Tool
 split_type: random
 use_aug: true
 

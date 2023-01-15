@@ -24,13 +24,12 @@ from datasets.dataset import ToolDataModule
 def main(config):
     svname = args.name
     if svname is None:
-        svname = 'meta_{}'.format(
-            config['split_type'])
+        svname = args.split_type
         svname += '_' + config['model']
-        if config['model_args'].get('encoder'):
-            svname += '-' + config['model_args']['encoder']
-        if config['model_args'].get('prog_synthesis'):
-            svname += '-' + config['model_args']['prog_synthesis']
+    if args.pretrained_enc:
+        svname += '_IN'
+    else:
+        svname += '_SC'
     if args.tag is not None:
         svname += '_' + args.tag
 
@@ -61,7 +60,7 @@ def main(config):
     print('seed：', args.seed)
 
     # dataset
-    data_module = ToolDataModule(ep_per_batch, 8, config['data_root'], config['split_type'], config['use_aug'])
+    data_module = ToolDataModule(ep_per_batch, 8, config['data_root'], args.split_type, config['use_aug'])
     # train
     train_loader = data_module.train_dataloader()
     if config.get('visualize_datasets'):
@@ -253,9 +252,11 @@ if __name__ == '__main__':
     parser.add_argument('--config')
     parser.add_argument('--name', default=None)
     parser.add_argument('--save_dir', default='./save')
+    parser.add_argument('--split_type', default='NS', help='NS or CGS')
     parser.add_argument('--tag', default=None)
     parser.add_argument('--gpu', default='1')
     parser.add_argument('--seed', type=int, default=123)
+    parser.add_argument('--pretrained_enc', default=False, action='store_true')
     args = parser.parse_args()
 
     config = yaml.load(open(args.config, 'r'), Loader=yaml.FullLoader)
@@ -263,5 +264,5 @@ if __name__ == '__main__':
     if len(args.gpu.split(',')) > 1:
         config['_parallel'] = True
 
-#     utils.set_gpu(args.gpu)
+    utils.set_gpu(args.gpu)
     main(config)
