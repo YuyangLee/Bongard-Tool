@@ -23,7 +23,7 @@ import PIL.Image
 from torchvision import transforms
 from datasets.shape_program import prog_idx2prog_str
 import torchvision.utils as vutils
-# from bongard import bongard_painter, bongard
+from bongard import bongard_painter, bongard
 from bongard import bongard
 
 _log_path = None

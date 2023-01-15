@@ -28,6 +28,7 @@ def main(config):
         svname += '_' + config['model']
     if args.pretrained_enc:
         svname += '_IN'
+        config['model_args']['encoder_args']['pretrained'] = True
     else:
         svname += '_SC'
     if args.tag is not None:
