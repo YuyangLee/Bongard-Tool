@@ -10,6 +10,7 @@ model_args:
     normalize: false
 #load_encoder: ./save/encoders/shape-moco-resnet12.pth
 #load: ./save/meta_shape-bongard-6shot_meta-baseline-resnet12-seed123/epoch-last.pth
+# train_from_ckpt: '/home/yuliu/Projects/Bongard-Tool/baselines/save/NS_metaOptNet_SC/epoch-last.pth'
 
 n_way: 2
 n_shot: 6

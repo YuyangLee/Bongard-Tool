@@ -8,13 +8,14 @@ model_args:
     encoder_args: {pretrained: false}
 #load_encoder: ./materials/shape-moco-resnet12-epoch50.pth
 #load: ./save/meta_shape-bongard-6shot_meta-baseline-resnet12-seed123/epoch-last.pth
+train_from_ckpt: '/home/yuliu/Projects/Bongard-Tool/baselines/save/NS_meta-baseline_SC/epoch-last.pth'
 
 n_way: 2
 n_shot: 6
 n_query: 1
 ep_per_batch: 16
 
-max_epoch: 100
+max_epoch: 150
 optimizer: sgd
 optimizer_args: {lr: 0.001, weight_decay: 5.e-4}
 

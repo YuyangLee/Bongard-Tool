@@ -257,6 +257,8 @@ def main(config):
 
         writer.flush()
 
+        epoch += 1
+
     print('finished training!')
     logger.close()
 
