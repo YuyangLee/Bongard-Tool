@@ -23,9 +23,8 @@ from datasets.dataset import ToolDataModule
 
 def main(config):
     svname = args.name
-    if svname is None:
-        svname = args.split_type
-        svname += '_' + config['model']
+    svname += args.split_type
+    svname += '_' + config['model']
     if args.pretrained_enc:
         svname += '_IN'
         config['model_args']['encoder_args']['pretrained'] = True
@@ -114,7 +113,21 @@ def main(config):
     for k in aves_keys:
         trlog[k] = []
 
-    for epoch in range(1, max_epoch + 1):
+
+    if config.get('train_from_ckpt'):
+        print('loading pretrained model: ', config['train_from_ckpt'])
+        saved_obj = torch.load(config['train_from_ckpt'])
+        model_sd = saved_obj['model_sd']
+        model.load_state_dict(model_sd)
+        training = saved_obj['training']
+        epoch = training['epoch']
+        optimizer_sd = training['optimizer_sd']
+        optimizer.load_state_dict(optimizer_sd)
+    else:
+        epoch = 1
+
+
+    while (epoch < max_epoch + 1):
         timer_epoch.s()
         aves = {k: utils.Averager() for k in aves_keys}
 
@@ -251,7 +264,7 @@ def main(config):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--config')
-    parser.add_argument('--name', default=None)
+    parser.add_argument('--name', default='')
     parser.add_argument('--save_dir', default='./save')
     parser.add_argument('--split_type', default='NS', help='NS or CGS')
     parser.add_argument('--tag', default=None)
