@@ -8,23 +8,75 @@ import torch.nn.functional as F
 from PIL import Image
 from tqdm import tqdm
 
-openai.api_key = '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'
+openai.api_key = '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'
+
+
+def InitChatGPT():
+    start_prompt = "Let us play a game named Bongard-Tool. " +\
+                   "I will give you 6 tools that can perform a function, " +\
+                   "and 6 tools that can not perform that function. " +\
+                   "Then I will ask you whether another tool could perform that function. " +\
+                   "All you need to do is guess the possible function, and tell me yes or no. " +\
+                   "For example, there is a function that can be performed by these tools: " +\
+                   "['Styrofoam', 'Stone', 'Balsa-Wood', 'Cardboard', 'Wooden-Block', 'Clay'], " +\
+                   "and this function can not be performed by these tools: " +\
+                   "['Anchors', 'Padlock', 'Smartphone', 'Hacksaw', 'Tile-Saw', 'Scrub-Brush']. " +\
+                   "What function it may be? Can Plaster be used to perform this function? " +\
+                   "Can Robot-Arm be used to perform this function? " +\
+                   "You just need to answer: Possible functions: carving, crafting, or sculpture. Yes, No."
+    print(start_prompt)
+    return start_prompt
+    # response = openai.Completion.create(
+    #     model="text-davinci-003",
+    #     prompt=start_prompt,
+    #     temperature=0,
+    #     max_tokens=100,
+    #     top_p=1,
+    #     frequency_penalty=0,
+    #     presence_penalty=0,
+    # )
+    # print(response['choices'][0]['text'].strip())
+
+
+def ReasonByChatGPT(x):
+    # x: list of tool classes, 6 pos + 6 neg + 1 pos + 1 neg
+    prompt = f"There is a function that can be performed by these tools: {x[:6]}, " +\
+             f"and this function cannot be performed by these tools: {x[6:12]}. " +\
+             f"What function it may be? " +\
+             f"Can {x[12]} be used to perform this function? " +\
+             f"Can {x[13]} be used to perform this function? "
+    return prompt
+    # print(prompt)
+
+    # response = openai.Completion.create(
+    #     model="text-davinci-003",
+    #     prompt=prompt,
+    #     temperature=0,
+    #     max_tokens=100,
+    #     top_p=1,
+    #     frequency_penalty=0,
+    #     presence_penalty=0,
+    # )
+    # print(response['choices'][0]['text'].strip())
+
 
 def ReasonByGPT(x):
     # x: list of tool classes, 6 pos + 6 neg + 1 pos + 1 neg
-    prompt = f"There is a function that can be performed by these tools: {x[:6]}, \
-and this function cannot be performed by these tools: {x[6:12]}. \
-Can {x[12]} be used to perform this function? Answer with yes or no. \
-Answer:   "
+    prompt = f"There is a function that can be performed by these tools: {x[:6]}, " +\
+             f"and this function cannot be performed by these tools: {x[6:12]}. " +\
+             f"What function it may be? " +\
+             f"Can {x[12]} be used to perform this function? " +\
+             f"Can {x[13]} be used to perform this function? "
     print(prompt)
-    response = openai.Completion.create(
-        engine="text-davinci-003",
-        prompt=prompt,
-        temperature=0.,
-        max_tokens=5,
-        frequency_penalty=0.,
-    )
-    print(response)
+
+    # response = openai.Completion.create(
+    #     engine="text-davinci-003",
+    #     prompt=prompt,
+    #     temperature=0.,
+    #     max_tokens=200,
+    #     frequency_penalty=0.,
+    # )
+    # print(response['choices'][0]['text'].strip())
 
 
 class Classifier(nn.Module):
@@ -71,7 +123,7 @@ class Classifier(nn.Module):
 '''test'''
 if __name__ == '__main__':
     os.environ['CUDA_VISIBLE_DEVICES'] = '0'
-    model = Classifier('cuda', '/home/yuliu/Projects/Bongard-Tool/toolnames/names.1.2.1.json')
+    # model = Classifier('cuda', '/home/yuliu/Projects/Bongard-Tool/toolnames/names.1.2.1.json')
     split = 'test_func'
     data_root = '/home/yuliu/Dataset/Tool'
     # test
@@ -80,25 +132,29 @@ if __name__ == '__main__':
     keys = list(files.keys())
     img_files = [files[key] for key in keys]
     concepts = keys
-    idx = 5
-    accs = []
-    model.eval()
+    idx = 1000
+    # accs = []
+    # model.eval()
+    start_prompt = InitChatGPT()
+    prompts = [start_prompt]
     with torch.no_grad():
         for i in tqdm(range(len(img_files))):
-            if i == idx:
-                pass
-                img_paths = img_files[i]
-                concept = concepts[i]
-                print('concept:', concept)
-                pred = model(img_paths)
-                ground_truth = [f.split('/')[-2] for f in img_paths]
-                ReasonByGPT(ground_truth)
-                
-                acc = sum([1 if p == g else 0 for p, g in zip(pred, ground_truth)]) / len(pred)
-                # print(acc)
-                accs.append(acc)
-    print(sum(accs) / len(accs))
-    print('pred:', pred)
+            # if i == idx:
+            #     pass
+            img_paths = img_files[i]
+            concept = concepts[i]
+            print('concept:', concept)
+            # pred = model(img_paths)
+            ground_truth = [f.split('/')[-2] for f in img_paths]
+            prompt = ReasonByChatGPT(ground_truth)
+            prompts.append(prompt)
+            # acc = sum([1 if p == g else 0 for p, g in zip(pred, ground_truth)]) / len(pred)
+            # print(acc)
+            # accs.append(acc)
+    with open('prompts.txt', 'w') as f:
+        f.write('\n'.join(prompts))
+    # print(sum(accs) / len(accs))
+    # print('pred:', pred)
     print('gt:', ground_truth)
     # visualize
     from torchvision import transforms
@@ -114,6 +170,7 @@ if __name__ == '__main__':
     grid = torchvision.utils.make_grid(imgs, nrow=6)
     grid = T2(grid)
     grid.save('test.png')
+    InitChatGPT()
         
 
         
