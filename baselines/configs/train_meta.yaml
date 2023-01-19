@@ -1,5 +1,4 @@
 data_root: /home/yuliu/Dataset/Tool
-split_type: random
 use_aug: true
 
 model: meta-baseline
@@ -8,7 +7,7 @@ model_args:
     encoder_args: {pretrained: false}
 #load_encoder: ./materials/shape-moco-resnet12-epoch50.pth
 #load: ./save/meta_shape-bongard-6shot_meta-baseline-resnet12-seed123/epoch-last.pth
-train_from_ckpt: '/home/yuliu/Projects/Bongard-Tool/baselines/save/NS_meta-baseline_SC/epoch-last.pth'
+# train_from_ckpt: '/home/yuliu/Projects/Bongard-Tool/baselines/save/NS_meta-baseline_SC/epoch-last.pth'
 
 n_way: 2
 n_shot: 6

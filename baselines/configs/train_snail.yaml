@@ -1,5 +1,4 @@
 data_root: /home/yuliu/Dataset/Tool
-split_type: random
 use_aug: true
 
 model: snail
