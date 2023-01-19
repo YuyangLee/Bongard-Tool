@@ -157,20 +157,19 @@ if __name__ == '__main__':
     # print('pred:', pred)
     print('gt:', ground_truth)
     # visualize
-    from torchvision import transforms
-    import torchvision
-    T1 = transforms.ToTensor()
-    T2 = transforms.ToPILImage()
-    imgs = []
-    for path in img_paths:
-        img = Image.open(path)
-        img = T1(img)
-        imgs.append(img)
-    imgs = torch.stack(imgs)
-    grid = torchvision.utils.make_grid(imgs, nrow=6)
-    grid = T2(grid)
-    grid.save('test.png')
-    InitChatGPT()
+    # from torchvision import transforms
+    # import torchvision
+    # T1 = transforms.ToTensor()
+    # T2 = transforms.ToPILImage()
+    # imgs = []
+    # for path in img_paths:
+    #     img = Image.open(path)
+    #     img = T1(img)
+    #     imgs.append(img)
+    # imgs = torch.stack(imgs)
+    # grid = torchvision.utils.make_grid(imgs, nrow=6)
+    # grid = T2(grid)
+    # grid.save('test.png')
         
 
         

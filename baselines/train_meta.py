@@ -14,7 +14,6 @@ import torch.nn.functional as F
 from tqdm import tqdm
 from tensorboardX import SummaryWriter
 
-import datasets
 import models
 import utils
 import utils.few_shot as fs
